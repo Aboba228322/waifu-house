@@ -1,5 +1,3 @@
-# handlers/chat.py
-
 from aiogram import Dispatcher, types
 from aiogram.dispatcher.filters import Text
 from aiogram.dispatcher import FSMContext
