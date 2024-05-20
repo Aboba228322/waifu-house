@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, BigInteger, String, DateTime
+from sqlalchemy import create_engine, Column, Integer, BigInteger, String, DateTime, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import config
@@ -18,6 +18,7 @@ class User(Base):
     daily_requests = Column(Integer, default=config.DAILY_LIMIT)
     last_request_date = Column(DateTime, default=datetime.utcnow)
     subscription_status = Column(String, default='free')
+    referral_id = Column(BigInteger, nullable=True)
 
 def reset_daily_limits():
     current_time = datetime.utcnow()
