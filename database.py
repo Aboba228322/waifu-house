@@ -22,12 +22,14 @@ class User(Base):
     subscription_status = Column(String, default='free')
 
 def reset_daily_limits():
+    current_time = datetime.utcnow()
+    reset_time = current_time - timedelta(days=1)
+
     session = SessionLocal()
-    reset_time = datetime.utcnow() - timedelta(days=1)
     users = session.query(User).filter(User.last_request_date < reset_time).all()
     for user in users:
         user.daily_requests = config.DAILY_LIMIT
-        user.last_request_date = datetime.utcnow()
+        user.last_request_date = current_time
         session.add(user)
     session.commit()
     session.close()

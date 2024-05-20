@@ -14,6 +14,7 @@ bot = Bot(token=config.API_TOKEN)
 storage = MemoryStorage()
 dp = Dispatcher(bot, storage=storage)
 
+
 keyboard_markup = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
 btn_profile = types.KeyboardButton("Профиль")
 btn_subscription = types.KeyboardButton("Оплатить подписку")
@@ -25,6 +26,7 @@ keyboard_markup.add(btn_profile, btn_subscription, btn_referral, btn_settings, b
 @dp.message_handler(commands=["start"])
 async def send_welcome(message: types.Message):
     await message.reply("Добро пожаловать! Выберите действие:", reply_markup=keyboard_markup)
+
 
 profile.register_handlers_profile(dp)
 payment.register_handlers_payment(dp)

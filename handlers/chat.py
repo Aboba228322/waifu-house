@@ -7,7 +7,7 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 from utils import load_prompt, get_chatgpt_response
 from sqlalchemy.orm import Session
-from datetime import datetime
+from datetime import datetime, timedelta
 from database import SessionLocal, User
 
 
@@ -38,7 +38,7 @@ async def start_chat_handler(message: types.Message, state: FSMContext):
     if user_choice in ["анна", "екатерина", "мария"]:
         async with state.proxy() as data:
             data['prompt_file'] = f"{user_choice}.txt"
-
+        # Инициализация истории сообщений для пользователя
         user_conversations[telegram_id] = [{"role": "system", "content": load_prompt(f"{user_choice}.txt")}]
         await message.reply(f"Вы начали общение с {user_choice.capitalize()}! Напишите ей что-нибудь.")
         await ChatStates.chatting.set()
@@ -62,6 +62,10 @@ async def chat_handler(message: types.Message, state: FSMContext):
         session.add(user)
         session.commit()
         session.refresh(user)
+
+
+    if datetime.utcnow() - user.last_request_date > timedelta(days=1):
+        user.daily_requests = config.DAILY_LIMIT
 
     if user.daily_requests <= 0:
         await message.reply("Извините, вы исчерпали дневной лимит запросов.")
@@ -99,7 +103,7 @@ async def exit_to_menu(message: types.Message, state: FSMContext):
     btn_subscription = KeyboardButton("Оплатить подписку")
     btn_referral = KeyboardButton("Пригласить друга")
     btn_settings = KeyboardButton("Настройки")
-    btn_chat = KeyboardButton("Девушки")
+    btn_chat = types.KeyboardButton("Девушки")
     keyboard_markup.add(btn_profile, btn_subscription, btn_referral, btn_settings, btn_chat)
 
 
