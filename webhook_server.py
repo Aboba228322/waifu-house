@@ -5,6 +5,7 @@ from database import SessionLocal, User
 
 app = Flask(__name__)
 
+
 @app.route('/notification', methods=['POST'])
 def notification():
     data = request.form.to_dict()
@@ -12,7 +13,6 @@ def notification():
     requests_count = int(data.get('us_requests_count'))
     amount = data.get('AMOUNT')
     sign = data.get('SIGN')
-
 
     sign_check_str = f"{config.MERCHANT_ID}:{amount}:{config.SECRET_WORD_2}:{user_id}"
     sign_check = hashlib.md5(sign_check_str.encode()).hexdigest()
@@ -27,13 +27,16 @@ def notification():
         return 'YES'
     return 'NO'
 
+
 @app.route('/success', methods=['GET'])
 def success():
     return render_template('success.html')
 
+
 @app.route('/fail', methods=['GET'])
 def fail():
     return render_template('fail.html')
+
 
 if __name__ == '__main__':
     app.run(host=config.FLASK_HOST, port=config.FLASK_PORT)
