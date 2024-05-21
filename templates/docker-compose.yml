@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  bot:
+    build: .
+    environment:
+      - API_TOKEN=${API_TOKEN}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOST=db
+      - DB_NAME=${DB_NAME}
+      - REFERRAL_BONUS=${REFERRAL_BONUS}
+      - DAILY_LIMIT=${DAILY_LIMIT}
+      - MERCHANT_ID=${MERCHANT_ID}
+      - SECRET_WORD_1=${SECRET_WORD_1}
+      - SECRET_WORD_2=${SECRET_WORD_2}
+      - NOTIFICATION_URL=${NOTIFICATION_URL}
+      - SUCCESS_URL=${SUCCESS_URL}
+      - FAIL_URL=${FAIL_URL}
+      - FLASK_HOST=${FLASK_HOST}
+      - FLASK_PORT=${FLASK_PORT}
+    depends_on:
+      - db
+
+  webhook_server:
+    build: .
+    command: python webhook_server.py
+    environment:
+      - API_TOKEN=${API_TOKEN}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOST=db
+      - DB_NAME=${DB_NAME}
+      - REFERRAL_BONUS=${REFERRAL_BONUS}
+      - DAILY_LIMIT=${DAILY_LIMIT}
+      - MERCHANT_ID=${MERCHANT_ID}
+      - SECRET_WORD_1=${SECRET_WORD_1}
+      - SECRET_WORD_2=${SECRET_WORD_2}
+      - NOTIFICATION_URL=${NOTIFICATION_URL}
+      - SUCCESS_URL=${SUCCESS_URL}
+      - FAIL_URL=${FAIL_URL}
+      - FLASK_HOST=${FLASK_HOST}
+      - FLASK_PORT=${FLASK_PORT}
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

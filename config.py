@@ -1,20 +1,25 @@
-API_TOKEN = '7102857857:AAFI41QmDKb1Wd2-DzX9uLlxqoj0353UeWY'
-OPENAI_API_KEY = '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'
+import os
+from dotenv import load_dotenv
 
-DB_USER = 'admin'
-DB_PASSWORD = 'admin'
-DB_HOST = 'localhost'
-DB_NAME = 'postgres'
+load_dotenv()
 
-REFERRAL_BONUS = 5
-DAILY_LIMIT = 30
+API_TOKEN = os.getenv('API_TOKEN')
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 
-MERCHANT_ID = 'b958af9661b8f08618845b791cd08889'
-SECRET_WORD_1 = 'TJ&U8}N..zNcC7y'
-SECRET_WORD_2 = '9dLW*Zd*fAU26hs'
-NOTIFICATION_URL = 'https://deus-proxy.ru/notification'
-SUCCESS_URL = 'https://deus-proxy.ru/success'
-FAIL_URL = 'https://deus-proxy.ru/fail'
+DB_USER = os.getenv('DB_USER')
+DB_PASSWORD = os.getenv('DB_PASSWORD')
+DB_HOST = os.getenv('DB_HOST')
+DB_NAME = os.getenv('DB_NAME')
 
-FLASK_HOST = '0.0.0.0'
-FLASK_PORT = 5000
+REFERRAL_BONUS = int(os.getenv('REFERRAL_BONUS'))
+DAILY_LIMIT = int(os.getenv('DAILY_LIMIT'))
+
+MERCHANT_ID = os.getenv('MERCHANT_ID')
+SECRET_WORD_1 = os.getenv('SECRET_WORD_1')
+SECRET_WORD_2 = os.getenv('SECRET_WORD_2')
+NOTIFICATION_URL = os.getenv('NOTIFICATION_URL')
+SUCCESS_URL = os.getenv('SUCCESS_URL')
+FAIL_URL = os.getenv('FAIL_URL')
+
+FLASK_HOST = os.getenv('FLASK_HOST')
+FLASK_PORT = int(os.getenv('FLASK_PORT'))
