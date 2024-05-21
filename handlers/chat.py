@@ -36,7 +36,7 @@ async def start_chat_handler(message: types.Message, state: FSMContext):
     if user_choice in ["анна", "екатерина", "мария"]:
         async with state.proxy() as data:
             data['prompt_file'] = f"{user_choice}.txt"
-        # Инициализация истории сообщений для пользователя
+
         user_conversations[telegram_id] = [{"role": "system", "content": load_prompt(f"{user_choice}.txt")}]
         await message.reply(f"Вы начали общение с {user_choice.capitalize()}! Напишите ей что-нибудь.")
         await ChatStates.chatting.set()
@@ -97,11 +97,11 @@ async def exit_to_menu(message: types.Message, state: FSMContext):
     await state.finish()
 
     keyboard_markup = ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
-    btn_profile = KeyboardButton("Профиль")
-    btn_subscription = KeyboardButton("Оплатить подписку")
-    btn_referral = KeyboardButton("Пригласить друга")
-    btn_settings = KeyboardButton("Настройки")
-    btn_chat = types.KeyboardButton("Девушки")
+    btn_profile = types.KeyboardButton("ℹ️Профиль")
+    btn_subscription = types.KeyboardButton("💲Оплатить подписку")
+    btn_referral = types.KeyboardButton("🤝Пригласить друга")
+    btn_settings = types.KeyboardButton("⚙️Настройки")
+    btn_chat = types.KeyboardButton("👧Девушки")
     keyboard_markup.add(btn_profile, btn_subscription, btn_referral, btn_settings, btn_chat)
 
 
@@ -112,7 +112,7 @@ async def exit_to_menu(message: types.Message, state: FSMContext):
     await message.reply("Вы вернулись в главное меню. Выберите действие:", reply_markup=keyboard_markup)
 
 def register_handlers_chat(dp: Dispatcher):
-    dp.register_message_handler(choose_girl_handler, Text(equals="Девушки", ignore_case=True), state="*")
+    dp.register_message_handler(choose_girl_handler, Text(equals="👧Девушки", ignore_case=True), state="*")
     dp.register_message_handler(start_chat_handler, state=ChatStates.choosing_girl)
     dp.register_message_handler(chat_handler, state=ChatStates.chatting)
     dp.register_message_handler(exit_to_menu, Text(equals="Назад в меню", ignore_case=True), state="*")

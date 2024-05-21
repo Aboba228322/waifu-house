@@ -6,4 +6,4 @@ async def settings_handler(message: types.Message):
     await message.reply(response_text)
 
 def register_handlers_settings(dp: Dispatcher):
-    dp.register_message_handler(settings_handler, Text(equals="Настройки", ignore_case=True))
+    dp.register_message_handler(settings_handler, Text(equals="⚙️Настройки", ignore_case=True))

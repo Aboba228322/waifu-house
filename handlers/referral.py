@@ -19,4 +19,4 @@ async def referral_handler(message: types.Message):
     session.close()
 
 def register_handlers_referral(dp: Dispatcher):
-    dp.register_message_handler(referral_handler, Text(equals="Пригласить друга", ignore_case=True))
+    dp.register_message_handler(referral_handler, Text(equals="🤝Пригласить друга", ignore_case=True))

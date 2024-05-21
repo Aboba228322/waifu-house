@@ -29,4 +29,4 @@ async def profile_handler(message: types.Message):
     session.close()
 
 def register_handlers_profile(dp: Dispatcher):
-    dp.register_message_handler(profile_handler, Text(equals="Профиль", ignore_case=True))
+    dp.register_message_handler(profile_handler, Text(equals="ℹ️Профиль", ignore_case=True))
