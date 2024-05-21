@@ -13,7 +13,7 @@ def notification():
     amount = data.get('AMOUNT')
     sign = data.get('SIGN')
 
-    # Проверка подписи
+
     sign_check_str = f"{config.MERCHANT_ID}:{amount}:{config.SECRET_WORD_2}:{user_id}"
     sign_check = hashlib.md5(sign_check_str.encode()).hexdigest()
 

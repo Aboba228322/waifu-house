@@ -9,9 +9,9 @@ DB_NAME = 'postgres'
 REFERRAL_BONUS = 5
 DAILY_LIMIT = 30
 
-MERCHANT_ID = 'YOUR_MERCHANT_ID'
-SECRET_WORD_1 = 'YOUR_SECRET_WORD_1'
-SECRET_WORD_2 = 'YOUR_SECRET_WORD_2'
+MERCHANT_ID = 'b958af9661b8f08618845b791cd08889'
+SECRET_WORD_1 = 'TJ&U8}N..zNcC7y'
+SECRET_WORD_2 = '9dLW*Zd*fAU26hs'
 NOTIFICATION_URL = 'https://deus-proxy.ru/notification'
 SUCCESS_URL = 'https://deus-proxy.ru/success'
 FAIL_URL = 'https://deus-proxy.ru/fail'

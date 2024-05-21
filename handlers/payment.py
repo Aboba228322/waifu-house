@@ -18,7 +18,7 @@ async def payment_handler(message: types.Message):
     amount = 100
     requests_count = 50
 
-    session: Session = SessionLocal()
+    session = SessionLocal()
     user = session.query(User).filter(User.telegram_id == telegram_id).first()
     if not user:
         user = User(telegram_id=telegram_id, username=message.from_user.username)
@@ -33,4 +33,4 @@ async def payment_handler(message: types.Message):
     await message.reply("Для оплаты нажмите на кнопку ниже:", reply_markup=keyboard_markup)
 
 def register_handlers_payment(dp: Dispatcher):
-    dp.register_message_handler(payment_handler, Text(equals="💲Оплатить подписку", ignore_case=True))
+    dp.register_message_handler(payment_handler, Text(equals="Оплатить подписку", ignore_case=True))
