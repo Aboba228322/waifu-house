@@ -1,4 +1,6 @@
 #!/bin/bash
 
 python main.py &
-python webhook_server.py
+python webhook_server.py &
+
+wait
