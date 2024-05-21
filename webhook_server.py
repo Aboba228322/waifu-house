@@ -38,5 +38,5 @@ def fail():
     return render_template('fail.html')
 
 
-if __name__ == '__main__':
+def start_server():
     app.run(host=config.FLASK_HOST, port=config.FLASK_PORT)
