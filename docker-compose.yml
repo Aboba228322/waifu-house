@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   bot:
-    build: .
+    build: templates
     environment:
       - API_TOKEN=${API_TOKEN}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
@@ -24,7 +24,7 @@ services:
       - db
 
   webhook_server:
-    build: .
+    build: templates
     command: python webhook_server.py
     environment:
       - API_TOKEN=${API_TOKEN}
