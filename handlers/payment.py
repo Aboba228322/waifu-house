@@ -1,16 +1,19 @@
 import hashlib
-from datetime import datetime
+import requests
 from aiogram import Dispatcher, types
 from aiogram.dispatcher.filters import Text
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 import config
 from database import SessionLocal, User
 from sqlalchemy.orm import Session
+from datetime import datetime
 
 def get_payment_url(user_id, amount, requests_count):
+    currency = "RUB"
     order_id = f"{user_id}_{int(datetime.utcnow().timestamp())}"
-    sign = hashlib.md5(f"{config.MERCHANT_ID}:{amount}:{config.SECRET_WORD_1}:{order_id}".encode()).hexdigest()
-    return (f"https://pay.freekassa.ru/?m={config.MERCHANT_ID}&oa={amount}¤cy=RUB&o={order_id}&s={sign}"
+    sign_str = f"{config.MERCHANT_ID}:{amount}:{config.SECRET_WORD_1}:{currency}:{order_id}"
+    sign = hashlib.md5(sign_str.encode()).hexdigest()
+    return (f"https://pay.freekassa.ru/?m={config.MERCHANT_ID}&oa={amount}¤cy={currency}&o={order_id}&s={sign}"
             f"&us_user_id={user_id}&us_requests_count={requests_count}")
 
 async def payment_handler(message: types.Message):
