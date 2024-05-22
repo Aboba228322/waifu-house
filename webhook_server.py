@@ -6,7 +6,6 @@ import logging
 
 app = Flask(__name__)
 
-
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -17,12 +16,13 @@ def notification():
         user_id = data.get('us_user_id')
         requests_count = int(data.get('us_requests_count'))
         amount = data.get('AMOUNT')
+        merchant_order_id = data.get('MERCHANT_ORDER_ID')
         sign = data.get('SIGN')
 
         logger.info(f"Received notification: {data}")
 
-        # Проверка подписи
-        sign_check_str = f"{config.MERCHANT_ID}:{amount}:{config.SECRET_WORD_2}:{user_id}"
+
+        sign_check_str = f"{config.MERCHANT_ID}:{amount}:{config.SECRET_WORD_2}:{merchant_order_id}"
         sign_check = hashlib.md5(sign_check_str.encode()).hexdigest()
 
         if sign == sign_check:

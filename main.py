@@ -23,7 +23,7 @@ keyboard_markup.add(btn_profile, btn_subscription, btn_referral, btn_settings, b
 @dp.message_handler(commands=["start"])
 async def send_welcome(message: types.Message):
     args = message.get_args()
-    session = SessionLocal()
+    session: SessionLocal()
 
     telegram_id = message.from_user.id
     username = message.from_user.username
