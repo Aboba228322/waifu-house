@@ -23,7 +23,6 @@ keyboard_markup.add(btn_profile, btn_subscription, btn_referral, btn_settings, b
 @dp.message_handler(commands=["start"])
 async def send_welcome(message: types.Message):
     args = message.get_args()
-    session: SessionLocal()
 
     telegram_id = message.from_user.id
     username = message.from_user.username
@@ -32,24 +31,23 @@ async def send_welcome(message: types.Message):
     if args.isdigit():
         referrer_id = int(args)
 
-    user = session.query(User).filter(User.telegram_id == telegram_id).first()
+    with SessionLocal() as session:
+        user = session.query(User).filter(User.telegram_id == telegram_id).first()
 
-    if not user:
-        user = User(telegram_id=telegram_id, username=username, referral_id=referrer_id)
-        session.add(user)
-        session.commit()
-        session.refresh(user)
+        if not user:
+            user = User(telegram_id=telegram_id, username=username, referral_id=referrer_id)
+            session.add(user)
+            session.commit()
+            session.refresh(user)
 
-        if referrer_id:
-            referrer_user = session.query(User).filter(User.id == referrer_id).first()
-            if referrer_user:
-                referrer_user.daily_requests += config.REFERRAL_BONUS
-                session.commit()
-                await message.reply(f"Вы получили бонус! {referrer_user.username} пригласил вас и получил 5 дополнительных запросов.")
+            if referrer_id:
+                referrer_user = session.query(User).filter(User.id == referrer_id).first()
+                if referrer_user:
+                    referrer_user.daily_requests += config.REFERRAL_BONUS
+                    session.commit()
+                    await message.reply(f"Вы получили бонус! {referrer_user.username} пригласил вас и получил 5 дополнительных запросов.")
 
-    await message.reply("Добро пожаловать! Выберите действие:", reply_markup=keyboard_markup)
-
-    session.close()
+        await message.reply("Добро пожаловать! Выберите действие:", reply_markup=keyboard_markup)
 
 profile.register_handlers_profile(dp)
 payment.register_handlers_payment(dp)
