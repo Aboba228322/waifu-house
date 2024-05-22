@@ -40,4 +40,4 @@ async def payment_handler(message: types.Message):
     )
 
 def register_handlers_payment(dp: Dispatcher):
-    dp.register_message_handler(payment_handler, Text(equals="Оплатить подписку", ignore_case=True))
+    dp.register_message_handler(payment_handler, Text(equals="💲Оплатить подписку", ignore_case=True))
