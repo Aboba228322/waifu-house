@@ -1,12 +1,11 @@
 import hashlib
-import requests
+from datetime import datetime
 from aiogram import Dispatcher, types
 from aiogram.dispatcher.filters import Text
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 import config
 from database import SessionLocal, User
 from sqlalchemy.orm import Session
-from datetime import datetime
 
 def get_payment_url(user_id, amount, requests_count):
     order_id = f"{user_id}_{int(datetime.utcnow().timestamp())}"
