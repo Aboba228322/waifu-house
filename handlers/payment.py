@@ -17,7 +17,7 @@ def get_payment_url(user_id, amount, requests_count):
 
 async def payment_handler(message: types.Message):
     telegram_id = message.from_user.id
-    amount = 100
+    amount = 100.00
     requests_count = 50
 
     session: Session = SessionLocal()
@@ -40,4 +40,4 @@ async def payment_handler(message: types.Message):
     )
 
 def register_handlers_payment(dp: Dispatcher):
-    dp.register_message_handler(payment_handler, Text(equals="💲Оплатить подписку", ignore_case=True))
+    dp.register_message_handler(payment_handler, Text(equals="Оплатить подписку", ignore_case=True))

@@ -1,17 +1,16 @@
-from flask import Flask, request, render_template
+from flask import Flask, request
 import hashlib
 import config
 from database import SessionLocal, User
 import logging
-import telegram
+import requests
 
 app = Flask(__name__)
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-
-bot = telegram.Bot(token=config.API_TOKEN)
+TELEGRAM_API_URL = f"https://api.telegram.org/bot{config.API_TOKEN}/sendMessage"
 
 @app.route('/notification', methods=['POST'])
 def notification():
@@ -32,14 +31,12 @@ def notification():
         logger.info(f"Calculated Signature: {sign_check}")
         logger.info(f"Received Signature: {sign}")
 
+        message_text = (f"Received notification:\n{data}\n\n"
+                        f"Sign Check Data: {sign_check_str}\n"
+                        f"Calculated Signature: {sign_check}\n"
+                        f"Received Signature: {sign}")
 
-        bot.send_message(
-            chat_id=user_id,
-            text=f"Notification received:\n\n"
-                 f"Sign Check Data: {sign_check_str}\n"
-                 f"Calculated Signature: {sign_check}\n"
-                 f"Received Signature: {sign}"
-        )
+        send_message(user_id, message_text)
 
         if sign == sign_check:
             session = SessionLocal()
@@ -59,11 +56,19 @@ def notification():
 
 @app.route('/success', methods=['GET'])
 def success():
-    return render_template('success.html')
+    return "Оплата прошла успешно!"
 
 @app.route('/fail', methods=['GET'])
 def fail():
-    return render_template('fail.html')
+    return "Оплата не удалась!"
+
+def send_message(chat_id, text):
+    payload = {
+        'chat_id': chat_id,
+        'text': text,
+    }
+    response = requests.post(TELEGRAM_API_URL, json=payload)
+    return response.json()
 
 if __name__ == '__main__':
     app.run(host=config.FLASK_HOST, port=config.FLASK_PORT)
