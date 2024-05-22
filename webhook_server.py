@@ -3,11 +3,15 @@ import hashlib
 import config
 from database import SessionLocal, User
 import logging
+import telegram
 
 app = Flask(__name__)
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+
+bot = telegram.Bot(token=config.API_TOKEN)
 
 @app.route('/notification', methods=['POST'])
 def notification():
@@ -27,6 +31,15 @@ def notification():
         logger.info(f"Sign Check Data: {sign_check_str}")
         logger.info(f"Calculated Signature: {sign_check}")
         logger.info(f"Received Signature: {sign}")
+
+
+        bot.send_message(
+            chat_id=user_id,
+            text=f"Notification received:\n\n"
+                 f"Sign Check Data: {sign_check_str}\n"
+                 f"Calculated Signature: {sign_check}\n"
+                 f"Received Signature: {sign}"
+        )
 
         if sign == sign_check:
             session = SessionLocal()
