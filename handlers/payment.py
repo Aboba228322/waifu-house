@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 def get_payment_url(user_id, amount, requests_count):
     order_id = f"{user_id}_{int(datetime.utcnow().timestamp())}"
     sign = hashlib.md5(f"{config.MERCHANT_ID}:{amount}:{config.SECRET_WORD_1}:{order_id}".encode()).hexdigest()
-    return (f"https://pay.freekassa.ru/?m={config.MERCHANT_ID}&oa={amount}&i=&currency=RUB&o={order_id}&s={sign}"
+    return (f"https://pay.freekassa.ru/?m={config.MERCHANT_ID}&oa={amount}&currency=RUB&o={order_id}&s={sign}"
             f"&us_user_id={user_id}&us_requests_count={requests_count}")
 
 async def payment_handler(message: types.Message):
