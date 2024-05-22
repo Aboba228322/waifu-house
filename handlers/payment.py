@@ -15,7 +15,7 @@ def get_payment_url(user_id, amount, requests_count):
 
     print(f"Sign Data: {sign_data}")
 
-    return (f"https://pay.freekassa.ru/?m={config.MERCHANT_ID}&oa={amount}¤cy=RUB&o={order_id}&s={sign}"
+    return (f"https://pay.freekassa.ru/?m={config.MERCHANT_ID}&oa={amount}&currency=RUB&o={order_id}&s={sign}"
             f"&us_user_id={user_id}&us_requests_count={requests_count}")
 
 async def payment_handler(message: types.Message):
