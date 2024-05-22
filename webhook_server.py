@@ -21,7 +21,6 @@ def notification():
 
         logger.info(f"Received notification: {data}")
 
-
         sign_check_str = f"{config.MERCHANT_ID}:{amount}:{config.SECRET_WORD_2}:{merchant_order_id}"
         sign_check = hashlib.md5(sign_check_str.encode()).hexdigest()
 
