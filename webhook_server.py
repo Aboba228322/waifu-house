@@ -5,31 +5,41 @@ from database import SessionLocal, User
 import logging
 
 app = Flask(__name__)
+
+
 logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
-@app.route('/dota', methods=['POST'])
+@app.route('/notification', methods=['POST'])
 def notification():
-    data = request.form.to_dict()
-    logging.info(f"Received data: {data}")
+    try:
+        data = request.form.to_dict()
+        user_id = data.get('us_user_id')
+        requests_count = int(data.get('us_requests_count'))
+        amount = data.get('AMOUNT')
+        sign = data.get('SIGN')
 
-    user_id = data.get('us_user_id')
-    requests_count = int(data.get('us_requests_count'))
-    amount = data.get('AMOUNT')
-    sign = data.get('SIGN')
+        logger.info(f"Received notification: {data}")
 
+        # Проверка подписи
+        sign_check_str = f"{config.MERCHANT_ID}:{amount}:{config.SECRET_WORD_2}:{user_id}"
+        sign_check = hashlib.md5(sign_check_str.encode()).hexdigest()
 
-    sign_check_str = f"{config.MERCHANT_ID}:{amount}:{config.SECRET_WORD_2}:{user_id}"
-    sign_check = hashlib.md5(sign_check_str.encode()).hexdigest()
-
-    if sign == sign_check:
-        session = SessionLocal()
-        user = session.query(User).filter(User.id == user_id).first()
-        if user:
-            user.daily_requests += requests_count
-            session.commit()
-        session.close()
-        return 'YES'
-    return 'NO'
+        if sign == sign_check:
+            session = SessionLocal()
+            user = session.query(User).filter(User.id == user_id).first()
+            if user:
+                user.daily_requests += requests_count
+                session.commit()
+                logger.info(f"Updated user {user_id} requests: {user.daily_requests}")
+            session.close()
+            return 'YES'
+        else:
+            logger.error("Signature mismatch")
+            return 'NO'
+    except Exception as e:
+        logger.exception("Error processing notification")
+        return 'NO'
 
 @app.route('/success', methods=['GET'])
 def success():
