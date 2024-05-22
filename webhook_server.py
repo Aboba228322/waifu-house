@@ -24,6 +24,10 @@ def notification():
         sign_check_str = f"{config.MERCHANT_ID}:{amount}:{config.SECRET_WORD_2}:{merchant_order_id}"
         sign_check = hashlib.md5(sign_check_str.encode()).hexdigest()
 
+        logger.info(f"Sign Check Data: {sign_check_str}")
+        logger.info(f"Calculated Signature: {sign_check}")
+        logger.info(f"Received Signature: {sign}")
+
         if sign == sign_check:
             session = SessionLocal()
             user = session.query(User).filter(User.id == user_id).first()
