@@ -2,16 +2,21 @@ from flask import Flask, request, render_template
 import hashlib
 import config
 from database import SessionLocal, User
+import logging
 
 app = Flask(__name__)
+logging.basicConfig(level=logging.INFO)
 
-@app.route('/notification', methods=['POST'])
+@app.route('/dota', methods=['POST'])
 def notification():
     data = request.form.to_dict()
+    logging.info(f"Received data: {data}")
+
     user_id = data.get('us_user_id')
     requests_count = int(data.get('us_requests_count'))
     amount = data.get('AMOUNT')
     sign = data.get('SIGN')
+
 
     sign_check_str = f"{config.MERCHANT_ID}:{amount}:{config.SECRET_WORD_2}:{user_id}"
     sign_check = hashlib.md5(sign_check_str.encode()).hexdigest()
