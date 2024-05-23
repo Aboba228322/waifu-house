@@ -17,7 +17,7 @@ def get_payment_url(user_id, amount, requests_count):
 
 async def payment_handler(message: types.Message):
     telegram_id = message.from_user.id
-    amount = 100.00
+    amount = 100.11
     requests_count = 50
 
     session: Session = SessionLocal()
